@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findById(id).get();
 	}
 
-	@Override
+	
 	public User findByUsername(String username) {
 		return userRepository.findByUserName(username);
 	}
@@ -84,9 +85,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getCurrentUser() {
-		// TODO Auto-generated method stub
-		return null;
+	@Cacheable(value = "user",key="#uname")
+	public User getCurrentUser(String uname) {
+		
+		return userRepository.findByUserName(uname);
 	}
 
 	@Override
@@ -182,15 +184,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String isValidLogout() {
-		String responseToClient;
-		if (getCurrentUser() != null) {
-			SecurityContextHolder.clearContext();
-			responseToClient = "valid";
-		} else {
-			responseToClient = "invalid";
-		}
-		return responseToClient;
-
+		/*
+		 * String responseToClient; if (getCurrentUser() != null) {
+		 * SecurityContextHolder.clearContext(); responseToClient = "valid"; } else {
+		 * responseToClient = "invalid"; } return responseToClient;
+		 */
+		return null;
 	}
 
 	@Override

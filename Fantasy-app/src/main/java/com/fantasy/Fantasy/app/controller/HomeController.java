@@ -1,12 +1,11 @@
 package com.fantasy.Fantasy.app.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,11 +20,19 @@ public class HomeController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping(value = "/home")
-	public ResponseEntity<List<User>> getUser(){
+	@GetMapping(value = "/info")
+	public ResponseEntity<User> getUser(@RequestBody User user){
+		String username = "";
+		if(user!=null) {
+			username = user.getUserName();
+		}
 		
-		List<User> users = userService.findAllEmployees();
-		return new ResponseEntity<List<User>>(users,HttpStatus.OK);
+		User usr = userService.getCurrentUser(username);
+		if(usr!=null) {
+			return ResponseEntity.ok(usr);
+		}else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 		
 	}
 

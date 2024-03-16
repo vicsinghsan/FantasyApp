@@ -18,7 +18,7 @@ public interface UserService {
 	User findOne(Long id);
 	User findByUsername(String username);
 	User delete(User user);
-	User getCurrentUser();
+	User getCurrentUser(String uname);
 	String validateUser(User user);
 	String validateUserUpdate(User user);
 	String validateEmployeeUpdate(User user);
